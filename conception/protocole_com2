@@ -1,0 +1,68 @@
+@startuml
+actor Ant
+actor Client
+control Colony
+control Server
+entity Graph
+entity Genoma
+database BD
+
+== Find a genoma ==
+
+box "Colony" #LightBlue
+	actor Ant
+	control Colony
+	entity Graph
+	entity Genoma
+end box
+
+box "Server" #LightGreen
+	control Server
+	database BD
+end box
+
+box "Custumers" #LightBlue
+	actor Client
+end box
+
+
+Ant -> Colony: moveAntRandom()
+Activate Ant
+Activate Colony
+
+Colony -> Graph : end_parcours?
+Activate Graph
+Graph -> Colony :  yes/No
+Deactivate Graph
+Colony -> Genoma: if yes create_Genoma(tour)
+
+Activate Genoma
+Genoma -> Server: get_EG(genoma)
+Activate Server
+Server -> Client : test_Ad_unit()
+
+Activate Client
+Client -> Server:  data
+Deactivate Client
+Server -> Server : calculate_engagementRate(data)
+Server -> BD : engagement_rate
+Activate BD
+BD -> Server : ok_registered
+Deactivate BD
+
+
+Server -> Genoma : engagement_Rate
+Deactivate Server
+Genoma -> Colony : ok_registered(genoma, rate)
+Deactivate Genoma
+
+Colony -> Graph :  update_distances (genoma, rate)
+Activate Graph
+
+Colony -> Ant : lay_pheromones(pheromones)
+Colony -> Graph: update_pheromones(rate)
+Deactivate Graph
+Deactivate Colony
+Deactivate Ant
+
+@enduml

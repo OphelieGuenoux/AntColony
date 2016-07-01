@@ -1,0 +1,78 @@
+@startuml
+title Ant colony
+package ant_colony_pso_javascript.ACO {
+
+
+class Colony {
+	- population: List<ant>
+	- pheromones : List<X><Y>
+	- PopulationSize: int
+	- maxIterations : int
+	- alpha : int
+	- beta : int
+	- Q : int
+	- ip : int 
+	- best_length : int
+	+ void initialise()
+	+ void iterate()
+	+ void exploration()
+	+ void sendOutAnts()
+	+ void updateDistance(rateTab)
+	+ void updatePheromones()
+	+ void evaporatePheromones()
+	+ void deamonAction()
+	
+}
+note right : ip = pheromones rate\n best_solution = genoma \n update pheromones -> use Genoma
+
+class Ant {
+	- id : int
+	- position : Array<int>
+	- tour: Array<town>
+	- walklength : int
+	- currentNode : Town
+	+ void visitTown(town)
+	+ boolean isVisited(town)
+	+ void moveAnt(distances, pheromones)
+	+ Town chooseNext(distances, pheromones)
+	+ void randomMove()
+	+ Town selectNextTown()
+	+ int calculateWalkLength()
+
+
+}
+class Colony *-- class Ant
+}
+
+package ant_colony_pso_javascript.PSO {
+
+	class Graph {
+		- nodes: town 
+		- distances: int
+		- nb_nodes : int
+		+ node getRandomNode()
+	}
+Graph *-- Colony
+}
+
+class BD {
+	- engagement_rate : int
+	+ int get_EG(genoma)	
+}
+
+
+package ant_colony_pso_javascript.model{
+	class Genoma{
+		- id : Array <town>
+		- rate : int
+		+ Array <Bit> get_id()
+		+ Array <Bit> translateTown2Bit(id)
+		+ rate obtainEngagementRate(Array<bit>)
+
+	}
+Colony -right-> Genoma
+}
+Genoma -up-> BD
+
+note right : ask the BD in order to know \n the EG for the genoma
+@enduml
